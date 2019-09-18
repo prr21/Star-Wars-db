@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import Loading from '../loading'
+import Loading from '../loading';
+import ErrorIndicator from '../error-indicator';
 import SwapiResorse from '../../services/swapi-services';
 
 import './random-planet.css';
@@ -9,12 +10,25 @@ export default class RandomPlanet extends Component {
 
     state = {
         planet: {},
-        loading: true
+        loading: true,
+        error: false
     }
 
-    constructor(){
-        super()
+    componentDidMount(){
         this.updatePlanet()
+
+        const intervalId = setInterval(() => {
+            this.updatePlanet()
+        }, 4000)
+
+        // clearInterval(intervalId)
+    }
+
+    onError = () => {
+        this.setState({
+            loading: false,
+            error: true
+        })
     }
 
     onPlanetLoaded = (planet) => {
@@ -25,18 +39,23 @@ export default class RandomPlanet extends Component {
     }
 
     updatePlanet(){
-        this.swapService.getPlanet(12)
+        const id = Math.floor( Math.random() * 19) + 3;
+
+        this.swapService.getPlanet(id)
             .then(this.onPlanetLoaded)
+            .catch(this.onError)
     }
 
     render() {
-        const { planet, loading } = this.state
+        const { planet, loading, error } = this.state
 
-        const load    =  loading ? <Loading /> : null
-        const content = !loading ? <PlanetView planet={planet} /> : null
+        const showError =  error  ? <ErrorIndicator /> : null
+        const load      =  loading ? <Loading /> : null
+        const content   = (!loading && !error) ? <PlanetView planet={planet} /> : null
 
         return (
             <div className="random-planet jumbotron rounded">
+                {showError}
                 {load}
                 {content}
             </div>
