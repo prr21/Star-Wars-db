@@ -38,14 +38,14 @@ export default class SwapiResorse {
     	return res.results.map( this._transformShip )
   	}
 
-  	_extractId(item){
+  	_extractId = (item) => {
   		const re = /\/([0-9]*)\/$/
   		const id = item.url.match(re)[1]
   		
   		return id
   	}
 
-  	_transformPlanet(planet){
+  	_transformPlanet = (planet) => {
   		const id = this._extractId(planet);
   		return {
             id,
@@ -56,7 +56,7 @@ export default class SwapiResorse {
   		}
   	}
 
-  	_transformShip(ship){
+  	_transformShip = (ship) => {
   		const id = this._extractId(ship);
   		return {
   			id,
@@ -68,7 +68,7 @@ export default class SwapiResorse {
   		}
   	}
 
-  	_transformPeople(person){
+  	_transformPeople = (person) => {
   		const id = this._extractId(person);
   		return {
   			id,
