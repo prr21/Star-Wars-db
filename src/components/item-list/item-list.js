@@ -1,54 +1,50 @@
 import React, { Component } from 'react';
-import SwapiResorse from '../../services/swapi-services';
 import Loading from '../loading';
 
 import './item-list.css';
 
 export default class ItemList extends Component {
-
-    swapiResorse = new SwapiResorse()
-
     state = {
-        loading: true,
-        peopleList: null
+        itemList: null
     }
 
     componentDidMount = () => {
-        this.swapiResorse.getAllPeople()
-            .then(this.onPeopleListLoaded)
+        this.props.getData()
+            .then((itemList) => {
+
+                this.setState({
+                    itemList
+                })
+            })
     }
 
-    onPeopleListLoaded = (arr) => {
-        const peopleList = arr.map(( {id,name} ) => {
+    renderItems = (arr) => {
+        return arr.map(( {id,name} ) => {
             return (
                 <li className="list-group-item"
-                    onClick={ () => this.props.selectedPerson(id) }
+                    onClick={ () => this.props.selectedItem(id) }
                     key={id}>
                     {name}
                 </li>
             )
         })
-
-        this.setState({
-            peopleList,
-            loading: false
-        })
     }
 
     render() {
-        const { peopleList, loading } = this.state
+        const { itemList } = this.state
 
-        if (loading) {
+        if (!itemList) {
             return (
                 <div className="d-flex"> 
                     <Loading />
                 </div>
             )
         }
+        const list = this.renderItems(itemList)
 
         return (
             <ul className="item-list list-group">
-               {peopleList}
+               {list}
             </ul>
         );
     }

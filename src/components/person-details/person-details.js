@@ -60,11 +60,11 @@ export default class PersonDetails extends Component {
     decideContent(){
         const { person, loading, error } = this.state
 
-        if (!person) {
-            return <DefaultDiv />
-
-        } else if (loading) {
+        if (loading) {
             return <ShowLoading />
+
+        } else if (!person) {
+            return <DefaultDiv />
 
         } else if (error) {
             return <ErrorIndicator />

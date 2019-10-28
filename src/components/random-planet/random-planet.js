@@ -6,7 +6,7 @@ import SwapiResorse from '../../services/swapi-services';
 import './random-planet.css';
 
 export default class RandomPlanet extends Component {
-    swapService = new SwapiResorse()
+    swapiResorse = new SwapiResorse()
 
     state = {
         planet: {},
@@ -17,11 +17,13 @@ export default class RandomPlanet extends Component {
     componentDidMount(){
         this.updatePlanet()
 
-        const intervalId = setInterval(() => {
+        this.intervalId = setInterval(() => {
             this.updatePlanet()
         }, 4000)
+    }
 
-        // clearInterval(intervalId)
+    componentWillUnmount(){
+        clearInterval(this.intervalId)
     }
 
     onError = () => {
@@ -41,7 +43,7 @@ export default class RandomPlanet extends Component {
     updatePlanet(){
         const id = Math.floor( Math.random() * 19) + 2;
 
-        this.swapService.getPlanet(id)
+        this.swapiResorse.getPlanet(id)
             .then(this.onPlanetLoaded)
             .catch(this.onError)
     }
