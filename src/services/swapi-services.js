@@ -52,7 +52,8 @@ export default class SwapiResorse {
             name: planet.name,
             population: planet.population,
             rotationPeriod: planet.rotation_period,
-            diameter: planet.diameter
+            diameter: planet.diameter,
+            climate: planet.climate
   		}
   	}
 
