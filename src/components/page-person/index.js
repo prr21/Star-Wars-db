@@ -1,3 +1,3 @@
-import 'page-person' from './page-person'
+import PagePerson from './page-person'
 
-export default pagePerson
+export default PagePerson

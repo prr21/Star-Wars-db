@@ -4,12 +4,15 @@ import Loading from '../loading';
 import './item-list.css';
 
 export default class ItemList extends Component {
+
     state = {
         itemList: null
     }
 
     componentDidMount = () => {
-        this.props.getData()
+        const { getData } = this.props
+        
+        getData()
             .then((itemList) => {
 
                 this.setState({
@@ -19,12 +22,16 @@ export default class ItemList extends Component {
     }
 
     renderItems = (arr) => {
-        return arr.map(( {id,name} ) => {
+        return arr.map((item) => {
+
+            const label = this.props.children(item)
+            const {id} = item
+
             return (
                 <li className="list-group-item"
-                    onClick={ () => this.props.selectedItem(id) }
+                    onClick={ () => this.props.onSelectedItem(id)}
                     key={id}>
-                    {name}
+                    {label}
                 </li>
             )
         })

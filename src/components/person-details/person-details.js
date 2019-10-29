@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Loading from '../loading';
 import ErrorIndicator from '../error-indicator';
 import SwapiResorse from '../../services/swapi-services.js';
+import ErrorBtn from '../error-btn';
 
 import './person-details.css';
 
@@ -106,6 +107,7 @@ const ShowPerson = ( {person} ) => {
                     </li>
                 </ul>
                 
+                <ErrorBtn />
             </div>
         </div>
     )
