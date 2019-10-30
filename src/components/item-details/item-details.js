@@ -4,29 +4,30 @@ import ErrorIndicator from '../error-indicator';
 import SwapiResorse from '../../services/swapi-services.js';
 import ErrorBtn from '../error-btn';
 
-import './person-details.css';
+import './item-details.css';
 
-export default class PersonDetails extends Component {
+export default class ItemDetails extends Component {
 
     swapService = new SwapiResorse()
 
     state = {
         loading: false,
+        imageItem: null,
         error: false,
-        person: null
+        item: null
     }
 
     componentDidMount(){
-        this.updatePerson()
+        this.updateItem()
     }
 
     componentDidUpdate(prevProps){
-        if (this.props.personId !== prevProps.personId) {
+        if (this.props.itemId !== prevProps.itemId) {
 
             this.setState({
                 loading: true
             })
-            this.updatePerson()
+            this.updateItem()
         }
     }
 
@@ -37,21 +38,21 @@ export default class PersonDetails extends Component {
         })
     }    
 
-    updatePerson = () => {
-        const { personId } = this.props
+    updateItem = () => {
+        const { itemId, getItem, getImageUrl } = this.props
 
-        if (!personId) {
+        if (!itemId) {
             return
         }
 
-        this.swapService.getPerson(personId)
-            .then((person) => {
+        getItem(itemId)
+            .then((item) => {
 
                 this.setState({
-                    person,
+                    item,
                     loading: false,
+                    imageItem: getImageUrl(itemId),
                     error: false
-
                 })
             })
             .catch(this.onError)
@@ -59,56 +60,57 @@ export default class PersonDetails extends Component {
     }
 
     decideContent(){
-        const { person, loading, error } = this.state
+        const { item, loading, error } = this.state
 
         if (loading) {
             return <ShowLoading />
 
-        } else if (!person) {
+        } else if (!item) {
             return <DefaultDiv />
 
         } else if (error) {
             return <ErrorIndicator />
 
         } else {
-            return <ShowPerson person={person} />
+            return <ShowItem img={this.state.imageItem}item={item} />
         }
     }
 
     render() {
-        const content = this.decideContent()
-
+        const content = this.decideContent();
         return content
     }
 }
 
-const ShowPerson = ( {person} ) => {
-    const { id, name, gender, birthYear, eyeColor } = person
+const ShowItem = ( {item, img} ) => {
     return (
-        <div className="person-details card">
-            <img className="person-image" alt={name + ' star-wars'}
-            src={`https://starwars-visualguide.com/assets/img/characters/${id}.jpg`} />
+        <div className="item-details card">
+
+            <img className="item-image"  
+                alt={item.name + ' star-wars'}
+                src={img}/>
     
             <div className="card-body">
-                <h4>{name}</h4>
+                <h4>{item.name}</h4>
     
                 <ul className="list-group list-group-flush">
                     <li className="list-group-item">
                         <span className="term">Gender:</span>
-                        <span>{gender}</span>
+                        <span></span>
                     </li>
                     <li className="list-group-item">
                         <span className="term">Birth Year:</span>
-                        <span>{birthYear}</span>
+                        <span></span>
                     </li>
                     <li className="list-group-item">
                         <span className="term">Eye Color:</span>
-                        <span>{eyeColor}</span>
+                        <span></span>
                     </li>
                 </ul>
                 
                 <ErrorBtn />
             </div>
+
         </div>
     )
 }
@@ -116,7 +118,7 @@ const ShowPerson = ( {person} ) => {
 const DefaultDiv = () => {
     return (
         <div className="text-center p-4 border border-secondary bg-light">
-            <span>Выберите персонажа</span>
+            <span>Выберите ячейку</span>
         </div>
     )
 }
