@@ -13,9 +13,6 @@ import './app.css';
 export default class App extends Component {
 
     state = {
-        personId: null,
-        planetId: null,
-        shipId: null,
         showRandomPlanet: true,
     }
 
@@ -29,9 +26,9 @@ export default class App extends Component {
         })
     }
 
-    selectedItem = (personId) => {
+    selectedItem = (itemId) => {
         this.setState({
-            personId
+            itemId
         })
     }
 
