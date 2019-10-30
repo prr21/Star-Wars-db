@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import Row from '../row';
 import ItemList from '../item-list';
 import ErrorBoundary from '../error-boundary';
-import PersonDetails from '../person-details';
+import ItemDetails from '../item-details';
 
 import SwapiResorse from '../../services/swapi-services';
 import './page-person.css'
@@ -22,21 +22,26 @@ export default class PagePerson extends Component {
 	
 	render(){
 		const itemList = (
-			<ItemList onSelectedItem={this.onPersonSelected} 
+			<ItemList 
+				onSelectedItem={this.onPersonSelected} 
 				getData={this.swapiResorse.getAllPeople}>
-				{
-					(i) => `${i.name} (${i.gender})` 
-				}
+					{ 
+						(i) => `${i.name} (${i.gender})` 
+					}
+
 			</ItemList>
 		)
 
-		const personDetails = (
-			<PersonDetails personId={this.state.selectedPerson}/>
+		const itemDetails = (
+			<ItemDetails 
+				itemId={this.state.selectedPerson}
+				getItem={ this.swapiResorse.getPerson }
+				getImageUrl={this.swapiResorse.getImagePerson}/>
 		)
 
 		return (
 			<ErrorBoundary>
-				<Row firstWidget={itemList} secondWidget={personDetails}/>
+				<Row firstWidget={itemList} secondWidget={itemDetails}/>
 			</ErrorBoundary>
 		)
 
