@@ -1,10 +1,22 @@
 import React, { Component } from 'react';
 import Loading from '../loading';
 import ErrorIndicator from '../error-indicator';
-import SwapiResorse from '../../services/swapi-services.js';
 import ErrorBtn from '../error-btn';
 
+import SwapiResorse from '../../services/swapi-services.js';
 import './item-details.css';
+
+const Record = ({ item, field, label }) => {
+    return (
+        <li className="list-group-item">
+            <span className="term">{label}:</span>
+            <span>{ item[field] }</span>
+        </li>
+    )
+}
+export {
+  Record
+};
 
 export default class ItemDetails extends Component {
 
@@ -60,7 +72,7 @@ export default class ItemDetails extends Component {
     }
 
     decideContent(){
-        const { item, loading, error } = this.state
+        const { item, imageItem, loading, error } = this.state
 
         if (loading) {
             return <ShowLoading />
@@ -72,7 +84,10 @@ export default class ItemDetails extends Component {
             return <ErrorIndicator />
 
         } else {
-            return <ShowItem img={this.state.imageItem}item={item} />
+            return <ShowItem 
+                children={this.props.children} 
+                img={imageItem}
+                item={item} />
         }
     }
 
@@ -80,39 +95,6 @@ export default class ItemDetails extends Component {
         const content = this.decideContent();
         return content
     }
-}
-
-const ShowItem = ( {item, img} ) => {
-    return (
-        <div className="item-details card">
-
-            <img className="item-image"  
-                alt={item.name + ' star-wars'}
-                src={img}/>
-    
-            <div className="card-body">
-                <h4>{item.name}</h4>
-    
-                <ul className="list-group list-group-flush">
-                    <li className="list-group-item">
-                        <span className="term">Gender:</span>
-                        <span></span>
-                    </li>
-                    <li className="list-group-item">
-                        <span className="term">Birth Year:</span>
-                        <span></span>
-                    </li>
-                    <li className="list-group-item">
-                        <span className="term">Eye Color:</span>
-                        <span></span>
-                    </li>
-                </ul>
-                
-                <ErrorBtn />
-            </div>
-
-        </div>
-    )
 }
 
 const DefaultDiv = () => {
@@ -127,6 +109,32 @@ const ShowLoading = () => {
     return (
         <div className="d-flex">
             <Loading />
+        </div>
+    )
+}
+
+const ShowItem = ({item, img, children}) => {
+    return (
+        <div className="item-details card">
+
+            <img className="item-image"  
+                alt={item.name + ' star-wars'}
+                src={img}/>
+    
+            <div className="card-body">
+                <h4>{item.name}</h4>
+    
+                <ul className="list-group list-group-flush">
+                    {
+                        React.Children.map(children, (child) => {
+                            return React.cloneElement(child, { item });
+                        })
+                    }
+                </ul>
+                
+                <ErrorBtn />
+            </div>
+
         </div>
     )
 }

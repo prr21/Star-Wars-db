@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import Row from '../row';
 import ItemList from '../item-list';
 import ErrorBoundary from '../error-boundary';
-import ItemDetails from '../item-details';
+import ItemDetails, { Record } from '../item-details';
 
 import SwapiResorse from '../../services/swapi-services';
 import './page-person.css'
@@ -36,7 +36,11 @@ export default class PagePerson extends Component {
 			<ItemDetails 
 				itemId={this.state.selectedPerson}
 				getItem={ this.swapiResorse.getPerson }
-				getImageUrl={this.swapiResorse.getImagePerson}/>
+				getImageUrl={this.swapiResorse.getImagePerson}>
+					<Record field={'gender'} label={'Gender'} />
+					<Record field={'birthYear'} label={'Birth Year'} />
+					<Record field={'eyeColor'} label={'Eye Color'} />
+			</ItemDetails>
 		)
 
 		return (
