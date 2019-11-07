@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Loading from '../loading';
 import ErrorIndicator from '../error-indicator';
+import ErrorBoundary from '../error-boundary';
 import ErrorBtn from '../error-btn';
 
 import SwapiResorse from '../../services/swapi-services.js';
@@ -14,9 +15,7 @@ const Record = ({ item, field, label }) => {
         </li>
     )
 }
-export {
-  Record
-};
+export { Record }
 
 export default class ItemDetails extends Component {
 
@@ -51,13 +50,13 @@ export default class ItemDetails extends Component {
     }    
 
     updateItem = () => {
-        const { itemId, getItem, getImageUrl } = this.props
+        const { itemId, getData, getImageUrl } = this.props
 
         if (!itemId) {
             return
         }
 
-        getItem(itemId)
+        getData(itemId)
             .then((item) => {
 
                 this.setState({
@@ -115,6 +114,7 @@ const ShowLoading = () => {
 
 const ShowItem = ({item, img, children}) => {
     return (
+        <ErrorBoundary>
         <div className="item-details card">
 
             <img className="item-image"  
@@ -136,5 +136,6 @@ const ShowItem = ({item, img, children}) => {
             </div>
 
         </div>
+        </ErrorBoundary>
     )
 }

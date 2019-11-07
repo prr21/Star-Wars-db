@@ -1,58 +1,27 @@
-import React, { Component } from 'react';
-import Loading from '../loading';
-
+import React from 'react';
 import './item-list.css';
 
-export default class ItemList extends Component {
+const ItemList = (props) => {
 
-    state = {
-        itemList: null
-    }
+    const { data, selectedItem, children: renderItem } = props
+    const items = data.map((item) => {
 
-    componentDidMount = () => {
-        const { getData } = this.props
-        
-        getData()
-            .then((itemList) => {
-
-                this.setState({
-                    itemList
-                })
-            })
-    }
-
-    renderItems = (arr) => {
-        return arr.map((item) => {
-
-            const label = this.props.children(item)
-            const {id} = item
-
-            return (
-                <li className="list-group-item"
-                    onClick={ () => this.props.onSelectedItem(id)}
-                    key={id}>
-                    {label}
-                </li>
-            )
-        })
-    }
-
-    render() {
-        const { itemList } = this.state
-
-        if (!itemList) {
-            return (
-                <div className="d-flex"> 
-                    <Loading />
-                </div>
-            )
-        }
-        const list = this.renderItems(itemList)
+        const label = renderItem(item)
+        const { id } = item
 
         return (
-            <ul className="item-list list-group">
-               {list}
-            </ul>
-        );
-    }
+            <li className="list-group-item"
+                onClick={ () => selectedItem(id)}
+                key={id}>
+                {label}
+            </li>
+        )
+    })
+
+    return (
+        <ul className="item-list list-group">
+           {items}
+        </ul>
+    );
 }
+export default ItemList
