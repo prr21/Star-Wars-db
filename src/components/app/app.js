@@ -1,11 +1,18 @@
 import React, { Component } from 'react';
-
+import Row from '../row';
 import Header from '../header';
 import RandomPlanet from '../random-planet';
-import PagePerson from '../page-person';
 import ErrorBoundary from '../error-boundary';
 import ErrorBtn from '../error-btn';
-import ItemList from '../item-list';
+
+import {
+    PersonDetails,
+    PlanetDetails,
+    StarshipDetails,
+    PersonList,
+    PlanetList,
+    StarshipList
+} from '../sw-components';
 
 import SwapiResorse from '../../services/swapi-services';
 import './app.css';
@@ -14,6 +21,9 @@ export default class App extends Component {
 
     state = {
         showRandomPlanet: true,
+        personId: null,
+        planetId: null,
+        starshipId: null
     }
 
     swapiResorse = new SwapiResorse()
@@ -26,21 +36,36 @@ export default class App extends Component {
         })
     }
 
-    selectedItem = (itemId) => {
+    onSelectedPerson = (itemId) => {
         this.setState({
-            itemId
+            personId:itemId
+        })
+    }
+
+    onSelectedPlanet = (itemId) => {
+        this.setState({
+            planetId:itemId
+        })
+    }
+
+    onSelectedStarship = (itemId) => {
+        this.setState({
+            starshipId:itemId
         })
     }
 
     render(){
 
-        const planet = this.state.showRandomPlanet ?
+        const { personId, planetId, starshipId, showRandomPlanet } = this.state
+
+        const planet = showRandomPlanet ?
             <RandomPlanet/> :
             null;
 
         return (
             <ErrorBoundary>
                 <Header />
+
                 { planet }
 
                 <div className="row mb-2 button-row">
@@ -52,25 +77,24 @@ export default class App extends Component {
                     <ErrorBtn />
                 </div>
 
-                <PagePerson />
-
-                {/*<div className="row mb-4">
-                    <div className="col-md-6">
-                        <ItemList onSelectedItem={this.onPersonSelected}
-                            getData={this.swapiResorse.getAllPlanets}
-                            renderItem={({name, diameter, climate}) => `${name} (${diameter}, ${climate})`}
-                        />
-                    </div>
-                </div>
-
-                <div className="row mb-4">
-                    <div className="col-md-6">
-                        <ItemList onSelectedItem={this.onPersonSelected}
-                            getData={this.swapiResorse.getAllStarships}
-                            renderItem={({name, model}) => `${name} (${model})`}
-                        />
-                    </div>
-                </div>*/}
+                <Row 
+                    firstWidget = { 
+                        <PersonList selectedItem={this.onSelectedPerson}/> }
+                    secondWidget = { 
+                        <PersonDetails itemId={personId}/> }
+                />
+                <Row 
+                    firstWidget = { 
+                        <PlanetList selectedItem={this.onSelectedPlanet}/> 
+                    } secondWidget = { 
+                        <PlanetDetails itemId={planetId}/> }
+                />
+                <Row
+                    firstWidget = { 
+                        <StarshipList selectedItem={this.onSelectedStarship}/> 
+                    } secondWidget = { 
+                        <StarshipDetails itemId={starshipId}/> }
+                />
             </ErrorBoundary>
         );
     }
