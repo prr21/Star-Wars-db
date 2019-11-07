@@ -16,15 +16,27 @@ export default class SwapiResorse {
 		const person = await this.getResourse(`people/${id}/`)
 		return this._transformPeople(person)
 	}
-	getAllPeople = async () => {
-		const res = await this.getResourse('people/')
-		return res.results.map( this._transformPeople )
-	}
-
 	getPlanet = async (id) => {
 		const planet = await this.getResourse(`planets/${id}/`)
 		return this._transformPlanet(planet)
 	}
+	getStarship = async (id) => {
+  	const ship = await this.getResourse(`starships/${id}/`)
+  	return this._transformShip(ship)
+  }
+  
+	getAllPeople = async () => {
+		const res = await this.getResourse('people/')
+		return res.results.map( this._transformPeople )
+	}
+	getAllPlanets = async () => {
+		const res = await this.getResourse('planets/')
+		return res.results.map( this._transformPlanet )
+	}
+ 	getAllStarships = async () => {
+  	const res = await this.getResourse('starships/')
+  	return res.results.map( this._transformShip )
+  }
 
   getImagePerson = (id) => {
     return `${this._imageBase}/characters/${id}.jpg`
@@ -35,19 +47,6 @@ export default class SwapiResorse {
   getImageStarship = (id) => {
     return `${this._imageBase}/starships/${id}.jpg`
   }
-
-	getAllPlanets = async () => {
-		const res = await this.getResourse('planets/')
-		return res.results.map( this._transformPlanet )
-	}
-	getStarship = async (id) => {
-    	const ship = await this.getResourse(`/starships/${id}/`)
-    	return this._transformShip(ship)
-  	}
- 	getAllStarships = async () => {
-    	const res = await this.getResourse('starships/')
-    	return res.results.map( this._transformShip )
-  	}
 
   	_extractId = (item) => {
   		const re = /\/([0-9]*)\/$/
