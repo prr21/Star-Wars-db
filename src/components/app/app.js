@@ -14,6 +14,7 @@ import {
     StarshipList
 } from '../sw-components';
 
+import { SwapiProvider } from '../swapi-service-context'
 import SwapiResorse from '../../services/swapi-services';
 import './app.css';
 
@@ -64,6 +65,8 @@ export default class App extends Component {
 
         return (
             <ErrorBoundary>
+              <SwapiProvider value={this.swapiResorse}>
+
                 <Header />
 
                 { planet }
@@ -80,21 +83,23 @@ export default class App extends Component {
                 <Row 
                     firstWidget = { 
                         <PersonList selectedItem={this.onSelectedPerson}/> }
-                    secondWidget = { 
+                    secondWidget = {
                         <PersonDetails itemId={personId}/> }
                 />
                 <Row 
-                    firstWidget = { 
+                    firstWidget = {
                         <PlanetList selectedItem={this.onSelectedPlanet}/> 
-                    } secondWidget = { 
+                    } secondWidget = {
                         <PlanetDetails itemId={planetId}/> }
                 />
                 <Row
-                    firstWidget = { 
+                    firstWidget = {
                         <StarshipList selectedItem={this.onSelectedStarship}/> 
-                    } secondWidget = { 
+                    } secondWidget = {
                         <StarshipDetails itemId={starshipId}/> }
                 />
+
+              </SwapiProvider>
             </ErrorBoundary>
         );
     }
