@@ -1,3 +1,7 @@
 import withData from './with-data'
+import withSwapi from './with-swapi'
 
-export default withData
+export {
+	withData,
+	withSwapi
+}
