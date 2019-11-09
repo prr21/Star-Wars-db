@@ -16,6 +16,7 @@ import {
 
 import { SwapiProvider } from '../swapi-service-context'
 import SwapiResorse from '../../services/swapi-services';
+import TestResorse from '../../services/dummy-swapi-service';
 import './app.css';
 
 export default class App extends Component {
@@ -24,10 +25,9 @@ export default class App extends Component {
         showRandomPlanet: true,
         personId: null,
         planetId: null,
-        starshipId: null
+        starshipId: null,
+        swapiResorse: new SwapiResorse()
     }
-
-    swapiResorse = new SwapiResorse()
 
     toggleRandomPlanet = () => {
         this.setState((state) => {
@@ -35,6 +35,18 @@ export default class App extends Component {
                 showRandomPlanet: !state.showRandomPlanet
             }
         })
+    }
+
+    onToggleData = () => {
+        this.setState(({ swapiResorse }) => {
+
+            const apiResorse = swapiResorse instanceof TestResorse
+                                ? SwapiResorse : TestResorse
+
+            return {
+                swapiResorse: new apiResorse()
+            }
+        }) 
     }
 
     onSelectedPerson = (itemId) => {
@@ -57,7 +69,8 @@ export default class App extends Component {
 
     render(){
 
-        const { personId, planetId, starshipId, showRandomPlanet } = this.state
+        const { personId, planetId, starshipId, 
+                showRandomPlanet, swapiResorse } = this.state
 
         const planet = showRandomPlanet ?
             <RandomPlanet/> :
@@ -65,9 +78,9 @@ export default class App extends Component {
 
         return (
             <ErrorBoundary>
-              <SwapiProvider value={this.swapiResorse}>
+              <SwapiProvider value={swapiResorse}>
 
-                <Header />
+                <Header onToggleData={this.onToggleData}/>
 
                 { planet }
 
