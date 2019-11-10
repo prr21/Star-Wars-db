@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import ErrorIndicator from '../error-indicator';
 import Loading from '../loading';
 
 const withData = (View) => {
@@ -6,7 +7,8 @@ const withData = (View) => {
 
         state = {
             data: null,
-            loading: false
+            loading: false,
+            error: false
         }
 
         componentDidUpdate(prevProps){
@@ -29,13 +31,27 @@ const withData = (View) => {
                 .then((data) => {
                     this.setState({
                         data,
-                        loading: false
+                        loading: false,
+                        error: false
                     })
                 })
+                .catch (
+                    this.setState({
+                        loading: false,
+                        error: true
+                    })
+                )
+        }
+
+        onError(){
+            this.setState({
+                loading: false,
+                error: true
+            })
         }
 
         render(){
-            const { data, loading } = this.state
+            const { data, loading, error } = this.state
             
             if (!data || loading) {
                 return (
@@ -43,7 +59,11 @@ const withData = (View) => {
                         <Loading />
                     </div>
                 )
+                
+            } else if (error) {
+                return <ErrorIndicator />
             }
+
             return <View {...this.props} data={data}/>
         }
     }
