@@ -42,14 +42,7 @@ export default class ItemDetails extends Component {
             })
             this.updateItem()
         }
-    }
-
-    onError = () => {
-        this.setState({
-            loading: false,
-            error: true
-        })
-    }    
+    } 
 
     updateItem = () => {
         const { itemId, getData, getImageUrl } = this.props
@@ -71,7 +64,12 @@ export default class ItemDetails extends Component {
                     error: false
                 })
             })
-            .catch(this.onError)
+            .catch(
+                this.setState({
+                    loading: false,
+                    error: true
+                })
+            )
 
     }
 
