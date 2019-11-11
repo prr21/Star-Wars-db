@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 import './header.css';
 
@@ -7,13 +8,13 @@ const Header = ({ onToggleData }) => {
         <div className="header d-flex justify-content-between">
             <div className="d-flex">
                 <h3>
-                    <a href="#prr">Star DB</a>
+                    {<Link to="/" exact='true'>Star DB</Link>}
                 </h3>
 
                 <ul className="d-flex">
-                    <li> <a href="#prr1">People</a> </li>
-                    <li> <a href="#prr2">Planets</a> </li>
-                    <li> <a href="#prr3">Starships</a> </li>
+                    {<li> <Link to="/people/">People</Link> </li>}
+                    {<li> <Link to="/planets/">Planets</Link> </li>}
+                    {<li> <Link to="/starships/">Starships</Link> </li>}
                 </ul>
             </div>
 
