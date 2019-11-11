@@ -35,19 +35,12 @@ const withData = (View) => {
                         error: false
                     })
                 })
-                .catch (
+                .catch (() => {
                     this.setState({
-                        loading: false,
-                        error: true
-                    })
-                )
-        }
-
-        onError(){
-            this.setState({
-                loading: false,
-                error: true
-            })
+                        error: true,
+                        loading: false
+                    });
+                })
         }
 
         render(){
