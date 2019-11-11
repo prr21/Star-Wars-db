@@ -22,7 +22,7 @@ export default class ItemDetails extends Component {
     swapService = new SwapiResorse()
 
     state = {
-        loading: false,
+        loading: true,
         imageItem: null,
         error: false,
         item: null
@@ -64,16 +64,17 @@ export default class ItemDetails extends Component {
                     error: false
                 })
             })
-            .catch(
+            .catch(() => {
                 this.setState({
                     loading: false,
                     error: true
                 })
-            )
+            })
 
     }
 
     decideContent(){
+        console.log(this.state)
         const { item, imageItem, loading, error } = this.state
 
         if (loading) {
@@ -81,7 +82,7 @@ export default class ItemDetails extends Component {
 
         } else if (!item) {
             return <DefaultDiv />
-
+            
         } else if (error) {
             return <ErrorIndicator />
 
