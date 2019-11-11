@@ -1,18 +1,17 @@
 import React, { Component } from 'react';
-import Row from '../row';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
+
 import Header from '../header';
 import RandomPlanet from '../random-planet';
 import ErrorBoundary from '../error-boundary';
 import ErrorBtn from '../error-btn';
 
+import {StarshipDetails}from "../sw-components";
 import {
-    PersonDetails,
-    PlanetDetails,
-    StarshipDetails,
-    PersonList,
-    PlanetList,
-    StarshipList
-} from '../sw-components';
+    PersonPage,
+    PlanetPage,
+    StarshipPage
+} from '../pages'
 
 import { SwapiProvider } from '../swapi-service-context'
 import SwapiResorse from '../../services/swapi-services';
@@ -23,9 +22,6 @@ export default class App extends Component {
 
     state = {
         showRandomPlanet: true,
-        personId: null,
-        planetId: null,
-        starshipId: null,
         swapiResorse: new SwapiResorse()
     }
 
@@ -49,69 +45,44 @@ export default class App extends Component {
         }) 
     }
 
-    onSelectedPerson = (itemId) => {
-        this.setState({
-            personId:itemId
-        })
-    }
-
-    onSelectedPlanet = (itemId) => {
-        this.setState({
-            planetId:itemId
-        })
-    }
-
-    onSelectedStarship = (itemId) => {
-        this.setState({
-            starshipId:itemId
-        })
-    }
-
     render(){
 
-        const { personId, planetId, starshipId, 
-                showRandomPlanet, swapiResorse } = this.state
+        const { showRandomPlanet, swapiResorse } = this.state
 
         const planet = showRandomPlanet ?
-            <RandomPlanet/> :
+            <RandomPlanet /> :
             null;
 
         return (
             <ErrorBoundary>
               <SwapiProvider value={swapiResorse}>
+                <Router >
 
-                <Header onToggleData={this.onToggleData}/>
+                    <Header onToggleData={this.onToggleData}/>
 
-                { planet }
+                    { planet }
 
-                <div className="row mb-2 button-row">
-                    <button
-                        className="toggle-planet btn btn-warning btn-lg"
-                        onClick={this.toggleRandomPlanet}>
-                        Toggle Random Planet
-                    </button>
-                    <ErrorBtn />
-                </div>
+                    <div className="row mb-2 button-row">
+                        <button
+                            className="toggle-planet btn btn-warning btn-lg"
+                            onClick={this.toggleRandomPlanet}>
+                            Toggle Random Planet
+                        </button>
+                        <ErrorBtn />
+                    </div>
+                    <Route path='/' exact render={ () => 
+                        <h2 className='text-center mt-4'>Welcome To Star DB Application!</h2>
+                    } />
 
-                <Row 
-                    firstWidget = { 
-                        <PersonList selectedItem={this.onSelectedPerson}/> }
-                    secondWidget = {
-                        <PersonDetails itemId={personId}/> }
-                />
-                <Row 
-                    firstWidget = {
-                        <PlanetList selectedItem={this.onSelectedPlanet}/> 
-                    } secondWidget = {
-                        <PlanetDetails itemId={planetId}/> }
-                />
-                <Row
-                    firstWidget = {
-                        <StarshipList selectedItem={this.onSelectedStarship}/> 
-                    } secondWidget = {
-                        <StarshipDetails itemId={starshipId}/> }
-                />
+                    <Route path='/people/:id?' component={ PersonPage } />
+                    <Route path='/planets' component={ PlanetPage } />
+                    <Route path='/starships' exact component={ StarshipPage } />
 
+                    <Route path='/starships/:id' render={({ match }) => 
+                        <StarshipDetails itemId={match.params.id} />
+                    } />
+
+                </Router>
               </SwapiProvider>
             </ErrorBoundary>
         );
