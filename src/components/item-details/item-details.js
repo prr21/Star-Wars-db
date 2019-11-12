@@ -74,7 +74,6 @@ export default class ItemDetails extends Component {
     }
 
     decideContent(){
-        console.log(this.state)
         const { item, imageItem, loading, error } = this.state
 
         if (loading) {
