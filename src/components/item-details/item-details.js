@@ -1,10 +1,9 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import Loading from '../loading';
 import ErrorIndicator from '../error-indicator';
 import ErrorBoundary from '../error-boundary';
 import ErrorBtn from '../error-btn';
 
-import SwapiResorse from '../../services/swapi-services.js';
 import './item-details.css';
 
 const Record = ({ item, field, label }) => {
@@ -17,87 +16,68 @@ const Record = ({ item, field, label }) => {
 }
 export { Record }
 
-export default class ItemDetails extends Component {
+const ItemDetails = ( {itemId, getData, getImageUrl, children} ) => {
 
-    swapService = new SwapiResorse()
+    const [ status, setStatus ]              = useState( {loading: true, error: false} );
+    const [ itemDetails, changeItemDetails ] = useState( {imageItem: null, item: null} );
 
-    state = {
-        loading: true,
-        imageItem: null,
-        error: false,
-        item: null
-    }
-
-    componentDidMount(){
-        this.updateItem()
-    }
-
-    componentDidUpdate(prevProps){
-        if (this.props.itemId !== prevProps.itemId ||
-            this.props.getData !== prevProps.getData ||
-            this.props.getImageUrl !== prevProps.getImageUrl) {
-
-            this.setState({
-                loading: true
-            })
-            this.updateItem()
+    useEffect(() => {
+        function update(){
+            updateItem();
         }
-    } 
+        update();
+    }, [])
 
-    updateItem = () => {
-        const { itemId, getData, getImageUrl } = this.props
+    useEffect(() => {
+        function update(){
+            setStatus( {loading:true, error:false} );
+            updateItem()
+        }
+        update()
+        
+    }, [itemId, getData, getImageUrl])
 
+    const updateItem = () => {
         if (!itemId) {
-            return (
-                this.setState({
-                    loading: false
-                }))
+            return setStatus( {loading:false, error:false} );
         }
 
         getData(itemId)
             .then((item) => {
+                setStatus( {loading:false, error:false} );
 
-                this.setState({
+                changeItemDetails({
                     item,
-                    loading: false,
-                    imageItem: getImageUrl(itemId),
-                    error: false
+                    imageItem: getImageUrl(itemId)
                 })
             })
             .catch(() => {
-                this.setState({
-                    loading: false,
-                    error: true
-                })
+                setStatus( {loading:false, error:true} );
             })
-
     }
 
-    decideContent(){
-        const { item, imageItem, loading, error } = this.state
-
-        if (loading) {
+    const decideContent = () => {
+        if (status.loading) {
             return <ShowLoading />
 
-        } else if (!item) {
+        } else if (!itemDetails.item) {
             return <DefaultDiv />
             
-        } else if (error) {
+        } else if (status.error) {
             return <ErrorIndicator />
 
         } else {
             return <ShowItem 
-                children={this.props.children} 
-                img={imageItem}
-                item={item} />
+                children={children} 
+                img={itemDetails.imageItem}
+                item={itemDetails.item} />
         }
     }
 
-    render() {
-        const content = this.decideContent();
-        return content
-    }
+    return decideContent();
 }
+
+export default ItemDetails
 
 const DefaultDiv = () => {
     return (
