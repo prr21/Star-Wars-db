@@ -2,7 +2,7 @@
   "name": "star-wars-db",
   "version": "0.1.0",
   "private": true,
-  "homepage": "http://prr21.github.io/Star-Wars-db/build",
+  "homepage": "http://prr21.github.io/Star-Wars-db",
   "dependencies": {
     "http-server": "^0.11.1",
     "prop-types": "^15.7.2",
